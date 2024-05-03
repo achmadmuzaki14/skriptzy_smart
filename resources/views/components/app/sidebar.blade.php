@@ -83,8 +83,8 @@
                 </a>
             </li>
             <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link position-relative ms-0 ps-2 py-2 {{ is_current_route('users-management') ? 'active' : '' }}"
-                    href="{{ route('users-management') }}">
+                <a class="nav-link position-relative ms-0 ps-2 py-2 {{ is_current_route('kriteria.weboender.create') ? 'active' : '' }}"
+                    href="{{ route('kriteria.weboender.create') }}">
                     <span class="nav-link-text ms-1">Add Kriteria</span>
                 </a>
             </li>
@@ -106,8 +106,8 @@
                 </a>
             </li>
             <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link position-relative ms-0 ps-2 py-2 {{ is_current_route('users-management') ? 'active' : '' }}"
-                    href="{{ route('users-management') }}">
+                <a class="nav-link position-relative ms-0 ps-2 py-2 {{ is_current_route('alternatif.weboender.create') ? 'active' : '' }}"
+                    href="{{ route('alternatif.weboender.create') }}">
                     <span class="nav-link-text ms-1">Add Alternatif</span>
                 </a>
             </li>
