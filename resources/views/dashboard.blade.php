@@ -7,7 +7,7 @@
                 <div class="col-md-12">
                     <div class="d-md-flex align-items-center mb-3 mx-2">
                         <div class="mb-md-0 mb-3">
-                            <h3 class="font-weight-bold mb-0">Hello, Noah</h3>
+                            <h3 class="font-weight-bold mb-0">Hello, {{ explode(' ', auth()->user()->name)[0] }}</h3>
                             <p class="mb-0">This is DSS for Weboender!</p>
                         </div>
                         <button type="button"

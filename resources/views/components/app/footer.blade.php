@@ -8,13 +8,13 @@
                     document.write(new Date().getFullYear())
                 </script>
                 made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="text-secondary text-bold" target="_blank">Creative Tim</a> &
-                <a href="https://www.updivision.com" class="text-secondary text-bold" target="_blank">UPDIVISION</a>
-                for a better web.
+                <a href="https://www.creative-tim.com" class="text-secondary text-bold" target="_blank">Achmad Muzaki G</a>
+                {{-- <a href="https://www.updivision.com" class="text-secondary text-bold" target="_blank">UPDIVISION</a>
+                for a better web. --}}
             </div>
         </div>
         <div class="col-lg-6">
-            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+            {{-- <ul class="nav nav-footer justify-content-center justify-content-lg-end">
                 <li class="nav-item">
                     <a href="https://www.creative-tim.com" class="nav-link text-m text-muted" target="_blank">Creative
                         Tim</a>
@@ -35,7 +35,7 @@
                     <a href="https://www.creative-tim.com/license" class="nav-link text-m pe-0 text-muted"
                         target="_blank">License</a>
                 </li>
-            </ul>
+            </ul> --}}
         </div>
     </div>
 </footer>

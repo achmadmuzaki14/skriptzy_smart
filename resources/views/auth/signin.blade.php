@@ -17,9 +17,9 @@
                                     <h3 class="font-weight-black text-dark display-6">Welcome back</h3>
                                     <p class="mb-0">Welcome back!</p>
                                     <p class="mb-0">Create a new acount<br></p>
-                                    <p class="mb-0">OR Sign in with these credentials:</p>
-                                    <p class="mb-0">Email: <b>admin@corporateui.com</b></p>
-                                    <p class="mb-0">Password: <b>secret</b></p>
+                                    <p class="mb-0">OR Sign in with existing account</p>
+                                    {{-- <p class="mb-0">Email: <b>admin@corporateui.com</b></p>
+                                    <p class="mb-0">Password: <b>secret</b></p> --}}
                                 </div>
                                 <div class="text-center">
                                     @if (session('status'))
@@ -58,19 +58,19 @@
                                                     Remember for 14 days
                                                 </label>
                                             </div>
-                                            <a href="{{ route('password.request') }}"
+                                            {{-- <a href="{{ route('password.request') }}"
                                                 class="text-xs font-weight-bold ms-auto">Forgot
-                                                password</a>
+                                                password</a> --}}
                                         </div>
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-dark w-100 mt-4 mb-3">Sign in</button>
-                                            <button type="button" class="btn btn-white btn-icon w-100 mb-3">
+                                            {{-- <button type="button" class="btn btn-white btn-icon w-100 mb-3">
                                                 <span class="btn-inner--icon me-1">
                                                     <img class="w-5" src="../assets/img/logos/google-logo.svg"
                                                         alt="google-logo" />
                                                 </span>
                                                 <span class="btn-inner--text">Sign in with Google</span>
-                                            </button>
+                                            </button> --}}
                                         </div>
                                     </form>
                                 </div>
@@ -88,10 +88,8 @@
                                     style="background-image:url('../assets/img/image-sign-in.jpg')">
                                     <div
                                         class="blur mt-12 p-4 text-center border border-white border-radius-md position-absolute fixed-bottom m-4">
-                                        <h2 class="mt-3 text-dark font-weight-bold">Enter our global community of
-                                            developers.</h2>
-                                        <h6 class="text-dark text-sm mt-5">Copyright © 2022 Corporate UI Design System
-                                            by Creative Tim.</h6>
+                                        <h2 class="mt-3 text-dark font-weight-bold">We Assist You in Choosing the Best, for a Bright Future!</h2>
+                                        <h6 class="text-dark text-sm mt-5">Sistem Pendukung Keputusan Pemilihan Mahasiswa Terbaik Komunitas Akademik</h6>
                                     </div>
                                 </div>
                             </div>

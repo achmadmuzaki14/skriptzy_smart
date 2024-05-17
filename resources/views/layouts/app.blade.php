@@ -52,7 +52,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="../../assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../../assets/img/favicon.png">
     <title>
-        Corporate UI by Creative Tim & UPDIVISION
+        SPK Community
     </title>
     <!--     Fonts and icons     -->
     <link
@@ -66,6 +66,18 @@
     <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="../../assets/css/corporate-ui-dashboard.css?v=1.0.0" rel="stylesheet" />
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        } */
+    </style>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -88,7 +100,7 @@
 
     {{ $slot }}
 
-    <div class="fixed-plugin">
+    {{-- <div class="fixed-plugin">
         <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
             <i class="fa fa-cog py-2"></i>
         </a>
@@ -167,7 +179,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
+    @include('sweetalert::alert')
     <!--   Core JS Files   -->
     <script src="../../assets/js/core/popper.min.js"></script>
     <script src="../../assets/js/core/bootstrap.min.js"></script>
@@ -175,7 +188,7 @@
     <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../../assets/js/plugins/chartjs.min.js"></script>
     <script src="../../assets/js/plugins/swiper-bundle.min.js" type="text/javascript"></script>
-    <script>
+    {{-- <script>
         if (document.getElementsByClassName('mySwiper')) {
             var swiper = new Swiper(".mySwiper", {
                 effect: "cards",
@@ -428,7 +441,7 @@
                 },
             },
         });
-    </script>
+    </script> --}}
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {

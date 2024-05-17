@@ -2,8 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AlternatifController;
-use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\AlternativeController;
+use App\Http\Controllers\CriteriaController;
+use App\Http\Controllers\ScoreResultController;
+use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\AlternativeValueController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -21,28 +24,62 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 |
 */
 
-Route::group(['prefix' => 'alternatif'], function () {
+Route::group(['prefix' => 'alternative'], function () {
+    Route::get('/', [AlternativeController::class, 'index'])->name('alternative.weboender.index')->middleware('auth');
+    Route::get('/create', [AlternativeController::class, 'create'])->name('alternative.weboender.create')->middleware('auth');
+    Route::post('/', [AlternativeController::class, 'store'])->name('alternative.weboender.store')->middleware('auth');
+    Route::get('/{alternative}/edit', [AlternativeController::class, 'edit'])->name('alternative.edit');
+    Route::put('/{alternative}', [AlternativeController::class, 'update'])->name('alternative.update');
+    Route::delete('/{alternative}', [AlternativeController::class, 'destroy'])->name('alternative.destroy');
+});
 
-    // weboender untuk alternatif
-    Route::group(['prefix' => 'weboender'], function () {
-        Route::get('/', [AlternatifController::class, 'index'])->name('alternatif.weboender.index')->middleware('auth');
-        Route::get('/create', [AlternatifController::class, 'create'])->name('alternatif.weboender.create')->middleware('auth');
+Route::group(['prefix' => 'criteria'], function () {
+    Route::get('/', [CriteriaController::class, 'index'])->name('criteria.weboender.index')->middleware('auth');
+    Route::get('/create/data', [CriteriaController::class, 'create'])->name('criteria.weboender.create')->middleware('auth');
+    Route::post('/', [CriteriaController::class, 'store'])->name('criteria.weboender.store')->middleware('auth');
+    Route::get('/{criteria}/edit', [CriteriaController::class, 'edit'])->name('criteria.edit');
+    Route::put('/{criteria}', [CriteriaController::class, 'update'])->name('criteria.update');
+    Route::delete('/criteria/{criteria}', [CriteriaController::class, 'destroy'])->name('criteria.destroy');
+});
+
+Route::group(['prefix' => 'community'], function () {
+    Route::get('/', [CommunityController::class, 'index'])->name('community.index')->middleware('auth');
+    Route::get('/create', [CommunityController::class, 'create'])->name('community.create')->middleware('auth');
+    Route::post('/', [CommunityController::class, 'store'])->name('community.store')->middleware('auth');
+    Route::get('/list', [CommunityController::class, 'getCommunity'])->name('community.list');
+    Route::get('/{community}/edit', [CommunityController::class, 'edit'])->name('community.edit');
+    Route::put('/{community}', [CommunityController::class, 'update'])->name('community.update');
+    Route::delete('/{community}', [CommunityController::class, 'destroy'])->name('community.destroy');
+});
+
+Route::group(['prefix' => 'result'], function () {
+    Route::get('/', [ScoreResultController::class, 'index'])->name('result.index')->middleware('auth'); // cek kembali name route
+    Route::group(['prefix' => '{communityName}'], function () {
+        Route::get('/', [ScoreResultController::class, 'show'])->name('result.show')->middleware('auth'); // cek kembali name route
     });
 
 });
 
-Route::group(['prefix' => 'kriteria'], function () {
+Route::group(['prefix' => 'scoring'], function () {
+    Route::post('/alternative/get-by-community', [AlternativeController::class, 'getCommunityIdByAlternative'])->name('alternative.get-by-community');
+    Route::get('/create', [AlternativeValueController::class, 'create'])->name('scoring.create')->middleware('auth');
+    Route::post('/store', [AlternativeValueController::class, 'store'])->name('scoring.store')->middleware('auth');
+    Route::post('/check-exist', [AlternativeValueController::class, 'checkExist'])->name('scoring.check-exist');
 
-    // weboender untuk kriteria
-    Route::group(['prefix' => 'weboender'], function () {
-        Route::get('/', [KriteriaController::class, 'index'])->name('kriteria.weboender.index')->middleware('auth');
-        Route::get('/create', [KriteriaController::class, 'create'])->name('kriteria.weboender.create')->middleware('auth');
+    Route::group(['prefix' => '{communityName}'], function () {
+        Route::get('/', [AlternativeValueController::class, 'index'])->name('scoring.index')->middleware('auth'); // need penyesuaian
     });
 
 });
 
+// Route::get('/result/{communityName}', [ScoreResultController::class, 'index'])->name('result.index');
 
-
+// dont forget to delete
+Route::get('/utility', [ScoreResultController::class, 'calculateUtilityForAll']);
+Route::get('/final', [ScoreResultController::class, 'calculateFinalUtilityForAll']);
+Route::get('/masuk', [ScoreResultController::class, 'calculateRankingAndStore']);
+Route::get('/bobot', [ScoreResultController::class, 'criteriaWeight']);
+Route::get('/fraction', [ScoreResultController::class, 'fraction']);
 
 
 

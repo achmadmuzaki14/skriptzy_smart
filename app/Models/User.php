@@ -38,4 +38,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function AlternativeValue()
+    {
+        return $this->hasMany(AlternativeValue::class, 'user_id');
+    }
+
+    public function community()
+    {
+        return $this->belongsTo(Community::class);
+    }
 }

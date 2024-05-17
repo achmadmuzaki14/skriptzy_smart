@@ -6,12 +6,13 @@
         </div>
         <x-app.navbar />
         <div class="px-5 py-4 container-fluid ">
-            <form action={{ route('users.update') }} method="POST">
+            <form action={{ route('criteria.weboender.store') }} method="POST">
                 @csrf
-                @method('PUT')
-                <div class="mt-5 mb-5 mt-lg-9 row justify-content-center">
+                {{-- @method('POST') --}}
+                {{-- <div class="mt-5 mb-5 mt-lg-9 row justify-content-center"> --}}
+                <div class="mt-5 mt-lg-9 row justify-content-center">
                     <div class="col-lg-9 col-12">
-                        <div class="card card-body" id="profile">
+                        {{-- <div class="card card-body" id="profile">
                             <img src="../../../../assets/img/header-orange-purple.jpg" alt="pattern-lines"
                                 class="top-0 rounded-2 position-absolute start-0 w-100 h-100">
 
@@ -45,7 +46,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="row justify-content-center">
@@ -66,58 +67,40 @@
                     <div class="col-lg-9 col-12 ">
                         <div class="card " id="basic-info">
                             <div class="card-header">
-                                <h5>Basic Info</h5>
+                                <h5>Tambah Kriteria</h5>
                             </div>
                             <div class="pt-0 card-body">
-
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="name">Name</label>
-                                        <input type="text" name="name" id="name"
-                                            value="{{ old('name', auth()->user()->name) }}" class="form-control">
-                                        @error('name')
-                                            <span class="text-danger text-sm">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="email">Email</label>
-                                        <input type="email" name="email" id="email"
-                                            value="{{ old('email', auth()->user()->email) }}" class="form-control">
-                                        @error('email')
-                                            <span class="text-danger text-sm">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="location">Location</label>
-                                        <input type="text" name="location" id="location"
-                                            placeholder="Bucharest, Romania"
-                                            value="{{ old('location', auth()->user()->location) }}"
-                                            class="form-control">
-                                        @error('location')
-                                            <span class="text-danger text-sm">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-6">
-                                        <label for="phone">Phone</label>
-                                        <input type="text" name="phone" id="phone" placeholder="0733456987"
-                                            value="{{ old('phone', auth()->user()->phone) }}" class="form-control">
-                                        @error('phone')
-                                            <span class="text-danger text-sm">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="row p-2">
-                                    <label for="about">About me</label>
-                                    <textarea name="about" id="about" rows="5" class="form-control">{{ old('about', auth()->user()->about) }}</textarea>
-                                    @error('about')
+                                <div class="input-name-criteria">
+                                    <label for="name">Nama</label>
+                                    <input type="text" name="name" id="name" class="form-control"
+                                    placeholder="Masukkan nama kriteria">
+                                    @error('name')
                                         <span class="text-danger text-sm">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <button type="submit" class="mt-6 mb-0 btn btn-white btn-sm float-end">Save
-                                    changes</button>
+                                <div class="input-id-community-select">
+                                    <label for="author">Nama Komunitas</label>
+                                    <select class="form-control" name="community_id" id="community_id" style="width: 100%"
+                                        value="{{ old('community_id') }}">
+                                        <option value="">- Pilih Komunitas -</option>
+                                        @foreach ($communities as $community)
+                                        <option value="{{ $community->id }}"
+                                            {{ old('community_id') == $community->id ? "selected" : "" }}>
+                                            {{ $community->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('community_id') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="input-priority-criteria">
+                                    <label for="location">Urutan Prioritas</label>
+                                    <input type="number" step="0.0001" name="priority" id="priority"
+                                        placeholder="Masukkan Urutan Prioritas Kriteria"
+                                        class="form-control">
+                                    @error('location')
+                                        <span class="text-danger text-sm">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <button type="submit" class="mt-3 mb-0 btn btn-primary btn-sm float-end">Submit</button>
                             </div>
                         </div>
                     </div>
