@@ -314,9 +314,27 @@ class ScoreResultController extends Controller
     /**
      * Display the specified resource.
      */
+    // public function show($communityName)
+    // {
+    //    // Mendapatkan data terbaru dari setiap komunitas
+    //     $latestResults = ScoreResult::whereHas('alternative.community', function ($query) use ($communityName) {
+    //         $query->where('name', $communityName);
+    //     })->latest()->get();
+
+    //     // Kelompokkan hasil berdasarkan alternative_id dan ambil yang terbaru
+    //     $groupedResults = $latestResults->groupBy('alternative_id')->map(function ($group) {
+    //         return $group->first();
+    //     });
+
+    //     $sortedResults = $groupedResults->sortBy('rank');
+
+    //     // dd($groupedResults);
+    //     return view('result.show', compact('sortedResults'));
+    // }
+
     public function show($communityName)
     {
-       // Mendapatkan data terbaru dari setiap komunitas
+        // Mendapatkan data terbaru dari setiap komunitas
         $latestResults = ScoreResult::whereHas('alternative.community', function ($query) use ($communityName) {
             $query->where('name', $communityName);
         })->latest()->get();
@@ -326,8 +344,27 @@ class ScoreResultController extends Controller
             return $group->first();
         });
 
-        // dd($groupedResults);
-        return view('result.show', compact('groupedResults'));
+        $sortedResults = $groupedResults->sortBy('rank');
+
+        return view('result.show', compact('sortedResults', 'communityName'));
+    }
+
+
+    public function showUtility($communityName, $alternativeName)
+    {
+        // Mendapatkan semua nilai utilitas
+        $utilityValues = $this->calculateUtilityForAll();
+
+        // Cek apakah komunitas dan alternatif ada dalam data utilitas
+        if (isset($utilityValues[$communityName]) && isset($utilityValues[$communityName][$alternativeName])) {
+            // Mendapatkan nilai utilitas untuk komunitas dan alternatif tertentu
+            $utilityData = $utilityValues[$communityName][$alternativeName];
+        } else {
+            // Jika tidak ada data, berikan pesan error atau data default
+            $utilityData = [];
+        }
+
+        return view('result.detail', compact('communityName', 'alternativeName', 'utilityData'));
     }
 
     /**

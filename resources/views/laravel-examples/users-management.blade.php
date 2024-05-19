@@ -168,7 +168,7 @@
 
 </x-app-layout>
 
-<script src="/assets/js/plugins/datatables.js"></script>
+<script src="{{ asset('/assets/js/plugins/datatables.js') }}"></script>
 <script>
     const dataTableBasic = new simpleDatatables.DataTable("#datatable-search", {
         searchable: true,

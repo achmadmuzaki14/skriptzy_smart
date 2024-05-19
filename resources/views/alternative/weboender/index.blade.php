@@ -47,8 +47,8 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table text-secondary text-center">
+                        <div class="table-responsive px-3">
+                            <table class="table text-secondary text-center" id="alternative-table">
                                 <thead>
                                     <tr>
                                         <th
@@ -60,7 +60,7 @@
                                         <th
                                             class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             Nama Komunitas</th>
-                                        @if (auth()->user()->role == 'super_admin')
+                                        @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                             <th
                                             class="text-center text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             Action</th>
@@ -74,11 +74,11 @@
                                                 <td>{{ $rowNumber++ }}</td>
                                                 <td>{{ $alternative->name }}</td>
                                                 <td>{{ $alternative->community->name }}</td>
-                                                @if (auth()->user()->role == 'super_admin')
+                                                @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                                     <td>
                                                         <a href="{{ route('alternative.edit', $alternative->id) }}" class="btn btn-warning btn-sm"><i class=" mx-1 fas fa-pen"></i>Edit</a>
                                                         <a href="{{ route('alternative.destroy', $alternative->id) }}" class="btn btn-danger btn-sm"
-                                                            data-confirm-delete="true"><i class="fas fa-eye"></i>Delete
+                                                            data-confirm-delete="true"><i class="fas fa-trash fa-sm mx-1"></i>Delete
                                                         </a>
                                                     </td>
                                                 @endif
@@ -98,14 +98,12 @@
 
 </x-app-layout>
 
-<script src="/assets/js/plugins/datatables.js"></script>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script>
-    const dataTableBasic = new simpleDatatables.DataTable("#datatable-search", {
-        searchable: true,
-        fixedHeight: true,
-        columns: [{
-            select: [2, 6],
-            sortable: false
-        }]
+    $(document).ready(function() {
+        $('#alternative-table').DataTable({
+            searching: true, // Aktifkan fitur pencarian
+            scrollX: false
+        });
     });
 </script>

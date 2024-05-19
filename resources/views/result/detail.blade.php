@@ -36,25 +36,17 @@
                                         <th class="text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             No</th>
                                         <th class="text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
-                                            Alternatif</th>
+                                            Kriteria</th>
                                         <th class="text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
-                                            Ranking</th>
-                                        <th class="text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
-                                            Result</th>
-                                        <th class="text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
-                                            Detail</th>
+                                           Total Nilai Utility</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($sortedResults as $result)
+                                    @foreach ($utilityData as $criterionName => $utility)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $result->alternative->name }}</td>
-                                        <td>{{ $result->rank }}</td>
-                                        <td>{{ $result->hasil_penilaian }}</td>
-                                        <td>
-                                            <a href="{{ route('result.detail.show', ['communityName' => $communityName, 'alternativeName' => $result->alternative->name]) }}" class="btn btn-sm btn-primary">Detail</a>
-                                        </td>
+                                        <td>{{ $criterionName }}</td>
+                                        <td>{{ $utility }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

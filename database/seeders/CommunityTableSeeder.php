@@ -14,7 +14,34 @@ class CommunityTableSeeder extends Seeder
     public function run(): void
     {
         Community::create([
-            'name' => 'Weboender'
+            'name' => 'weboender'
+        ]);
+        Community::create([
+            'name' => 'gdsc'
+        ]);
+        Community::create([
+            'name' => 'mocap'
+        ]);
+        Community::create([
+            'name' => 'funjava'
+        ]);
+        Community::create([
+            'name' => 'uinux'
+        ]);
+        Community::create([
+            'name' => 'uinbuntu'
+        ]);
+        Community::create([
+            'name' => 'eth0'
+        ]);
+        Community::create([
+            'name' => 'dse'
+        ]);
+        Community::create([
+            'name' => 'mamud'
+        ]);
+        Community::create([
+            'name' => 'ontaki'
         ]);
     }
 }

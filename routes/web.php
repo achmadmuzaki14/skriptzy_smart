@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\ArtisanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,9 @@ Route::group(['prefix' => 'result'], function () {
     Route::get('/', [ScoreResultController::class, 'index'])->name('result.index')->middleware('auth'); // cek kembali name route
     Route::group(['prefix' => '{communityName}'], function () {
         Route::get('/', [ScoreResultController::class, 'show'])->name('result.show')->middleware('auth'); // cek kembali name route
+        Route::group(['prefix' => '{alternativeName}'], function () {
+            Route::get('/', [ScoreResultController::class, 'showUtility'])->name('result.detail.show')->middleware('auth');
+        });
     });
 
 });
@@ -64,6 +68,8 @@ Route::group(['prefix' => 'scoring'], function () {
     Route::post('/alternative/get-by-community', [AlternativeController::class, 'getCommunityIdByAlternative'])->name('alternative.get-by-community');
     Route::get('/create', [AlternativeValueController::class, 'create'])->name('scoring.create')->middleware('auth');
     Route::post('/store', [AlternativeValueController::class, 'store'])->name('scoring.store')->middleware('auth');
+    Route::get('/{alternativeValue}/edit', [AlternativeValueController::class, 'edit'])->name('scoring.edit');
+    Route::put('/{alternativeValue}', [AlternativeValueController::class, 'update'])->name('scoring.update');
     Route::post('/check-exist', [AlternativeValueController::class, 'checkExist'])->name('scoring.check-exist');
 
     Route::group(['prefix' => '{communityName}'], function () {
@@ -71,6 +77,9 @@ Route::group(['prefix' => 'scoring'], function () {
     });
 
 });
+
+// Artisan Command
+Route::get('/migrate-seed', [ArtisanController::class, 'migrateAndSeed']);
 
 // Route::get('/result/{communityName}', [ScoreResultController::class, 'index'])->name('result.index');
 

@@ -39,17 +39,17 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table text-secondary text-center">
+                        <div class="table-responsive px-3">
+                            <table id="tables" class="table text-secondary">
                                 <thead>
                                     <tr>
-                                        <th
+                                        <th class="text-center"
                                             class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             No</th>
                                         <th
                                             class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             Nama</th>
-                                        @if (auth()->user()->role == 'super_admin')
+                                        @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                             <th
                                                 class="text-center text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                                 Action</th>
@@ -59,20 +59,19 @@
                                 <tbody>
                                     @foreach ($Community as $community)
                                       <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
                                         <td>{{ $community->name }}</td>
-                                        @if (auth()->user()->role == 'super_admin')
-                                            <td>
+                                        @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
+                                            <td class="text-center">
                                             <a href="{{ route('community.edit', $community->id) }}" class="btn btn-warning btn-sm"><i class=" mx-1 fas fa-pen"></i>Edit</a>
                                             <a href="{{ route('community.destroy', $community->id) }}" class="btn btn-danger btn-sm"
-                                                data-confirm-delete="true"><i class="fas fa-eye mx-1"></i>Delete</a>
+                                                data-confirm-delete="true"><i class="fas fa-trash fa-sm mx-1"></i>Delete</a>
                                             </td>
                                         @endif
                                       </tr>
                                     @endforeach
                                   </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
@@ -80,17 +79,14 @@
         </div>
         <x-app.footer />
     </main>
-
 </x-app-layout>
 
-<script src="/assets/js/plugins/datatables.js"></script>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script>
-    const dataTableBasic = new simpleDatatables.DataTable("#datatable-search", {
-        searchable: true,
-        fixedHeight: true,
-        columns: [{
-            select: [2, 6],
-            sortable: false
-        }]
+    $(document).ready(function() {
+        $('#tables').DataTable({
+            searching: true, // Aktifkan fitur pencarian
+            scrollX: false
+        });
     });
 </script>

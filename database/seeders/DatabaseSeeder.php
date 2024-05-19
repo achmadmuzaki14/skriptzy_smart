@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             CommunityTableSeeder::class,
             CriteriaTableSeeder::class,
             AlternativeTableSeeder::class,
-            AlternativeValueTableSeeder::class,
+            // AlternativeValueTableSeeder::class,
           ]);
     }
 }

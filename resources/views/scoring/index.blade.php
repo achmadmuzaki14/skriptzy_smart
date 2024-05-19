@@ -69,23 +69,23 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table text-secondary text-center">
+                        <div class="table-responsive p-3">
+                            <table class="table text-secondary text-center" id="tables">
                                 <thead>
                                     <tr>
                                         <th
-                                            class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
+                                            class="text-center text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             ID</th>
                                         <th
-                                            class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
+                                            class="text-center text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             Nama Penilai</th>
                                         <th
-                                            class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
+                                            class="text-center text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             Nama Alternatif</th>
                                         <th
-                                            class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
+                                            class="text-center text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                             Score</th>
-                                        @if (auth()->user()->role == 'super_admin')
+                                        @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                             <th
                                                 class="text-center text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
                                                 Action</th>
@@ -95,17 +95,17 @@
                                 <tbody>
                                     @foreach ($alternative_values_data as $alternative_values)
                                       <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $alternative_values->user->name }}</td>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-start">{{ $alternative_values->user->name }}</td>
                                         <td>{{ $alternative_values->alternative->name }}</td>
-                                        <td>{{ $alternative_values->value }}</td>
-                                        @if (auth()->user()->role == 'super_admin')
+                                        <td class="text-center">{{ $alternative_values->value }}</td>
+                                        @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                             <td>
-                                                <a href="#" class="btn btn-warning btn-sm">
+                                                <a href="{{ route('scoring.edit', $alternative_values->id) }}" class="btn btn-warning btn-sm">
                                                     <i class="fas fa-pen"></i> Edit
                                                 </a>
                                             <a href="#" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-eye"></i> Hapus
+                                                <i class="fas fa-trash fa-sm"></i> Hapus
                                             </a>
                                             </td>
                                         @endif
@@ -145,6 +145,16 @@
       });
     });
   </script>
+
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tables').DataTable({
+            searching: true, // Aktifkan fitur pencarian
+            scrollX: false
+        });
+    });
+</script>
 
 {{-- <script src="/assets/js/plugins/datatables.js"></script>
 <script>

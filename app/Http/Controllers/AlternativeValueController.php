@@ -7,6 +7,7 @@ use App\Models\Alternative;
 use App\Models\Criteria;
 use App\Models\Community;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AlternativeValueController extends Controller
@@ -16,19 +17,24 @@ class AlternativeValueController extends Controller
      */
     public function index($communityName)
     {
+        // dd($communityName);
         if (($communityName == 'all') ) {
             if (auth()->user()->role == 'super_admin') {
                 $alternatives = Alternative::latest()->get();
                 $alternative_values_data = AlternativeValue::query()->get();
                 return view('scoring.index', compact(['alternative_values_data', 'alternatives']));
-            } else {
-                Alert::toast('Akses Dilarang!', 'error');
-                return redirect()->back();
             }
+            // } else {
+            //     dd('hai');
+            //     Alert::toast('Akses Dilarang!', 'error');
+            //     return redirect()->back();
+            // }
         }else {
+            // dd('hao');
             if (auth()->user()->role == 'user') {
+                $alternatives = Alternative::latest()->get();
                 $alternative_values_data = AlternativeValue::query()->get();
-                return view('scoring.index', compact('alternative_values_data'));
+                return view('scoring.index', compact('alternative_values_data', 'alternatives'));
             }else if(auth()->user()->community->name == $communityName){
                 // Dapatkan ID komunitas berdasarkan nama dari URL
                 $communityId = Community::where('name', $communityName)->value('id');
@@ -141,15 +147,55 @@ class AlternativeValueController extends Controller
      */
     public function edit(AlternativeValue $alternativeValue)
     {
-        //
+        if (auth()->user()->role == 'pembimbing' || auth()->user()->role == 'super_admin') {
+            $alternative_id = $alternativeValue->alternative_id;
+            $alternatives = Alternative::where('id', $alternativeValue->alternative_id)->get(); // Mengambil semua alternatif untuk dropdown
+            $community_id = Alternative::where('id', $alternative_id)->first()->community_id;
+            $criterias = Criteria::where('community_id', $community_id)->where('id', $alternativeValue->criteria_id)->get();
+            $current_user = auth()->user();
+
+            return view('scoring.edit', compact('alternativeValue', 'alternatives', 'criterias', 'current_user'));
+        } else {
+            Alert::toast('Akses Dilarang!', 'error');
+            return redirect()->back();
+        }
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, AlternativeValue $alternativeValue)
     {
-        //
+
+        try {
+            $validator = Validator::make($request->all(), [
+                'value' => 'required',
+              ]);
+
+              if ($validator->fails()) {
+                Alert::error('Gagal', $validator->errors()->first());
+                return redirect()->back()->withInput();
+              }
+
+              $alternativeValue->update($request->all());
+
+            // Lakukan perhitungan ulang peringkat dan simpan hasilnya
+            $penilaian = app(ScoreResultController::class)->calculateRankingAndStore();
+            if ($penilaian) {
+                // Berhasil memperbarui data
+                Alert::success('Berhasil', 'Data berhasil diperbarui');
+                return redirect()->route('scoring.index', ['communityName' => 'all']);
+            } else {
+                // Gagal menyimpan data
+                Alert::error('Gagal', 'Data gagal diperbarui');
+                return redirect()->back()->withInput();
+            }
+        } catch (\Exception $e) {
+            // Tangani pengecualian jika terjadi kesalahan
+            Alert::error('Gagal', 'Data gagal diperbarui');
+            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     /**

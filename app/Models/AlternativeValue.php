@@ -9,6 +9,9 @@ class AlternativeValue extends Model
 {
     use HasFactory;
 
+    protected $table = 'alternative_values';
+    protected $guarded = [];
+
 
     public function Alternative()
     {

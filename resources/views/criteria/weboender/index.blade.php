@@ -11,11 +11,6 @@
                             </script>
                         @endforeach
                     @endif
-                    {{-- <div class="alert alert-dark text-sm" role="alert">
-                        <strong>Add, Edit, Delete features are not functional!</strong> This is a
-                        <strong>PRO</strong> feature ! Click <a href="#" target="_blank" class="text-bold">here</a>
-                        to see the <strong>PRO</strong> product!
-                    </div> --}}
                     <div class="card">
                         <div class="pb-0 card-header">
                             <div class="row">
@@ -49,23 +44,15 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table text-secondary text-center">
+                        <div class="table-responsive px-3">
+                            <table id="criteria-table" class="table text-secondary">
                                 <thead>
                                     <tr>
-                                        <th
-                                            class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
-                                            No</th>
-                                        <th
-                                            class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
-                                            Nama</th>
-                                        <th
-                                            class="text-left text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
-                                            Komunitas</th>
-                                        @if (auth()->user()->role == 'super_admin')
-                                            <th
-                                                class="text-center text-uppercase font-weight-bold bg-transparent border-bottom text-secondary">
-                                                Action</th>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Komunitas</th>
+                                        @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
+                                            <th>Action</th>
                                         @endif
                                     </tr>
                                 </thead>
@@ -75,11 +62,11 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $criteria->name }}</td>
                                         <td>{{ $criteria->community->name }}</td>
-                                        @if (auth()->user()->role == 'super_admin')
+                                        @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                             <td>
                                                 <a href="{{ route('criteria.edit', $criteria->id) }}" class="btn btn-warning btn-sm"><i class=" mx-1 fas fa-pen"></i>Edit</a>
                                                 <a href="{{ route('criteria.destroy', $criteria->id) }}" class="btn btn-danger btn-sm"
-                                                    data-confirm-delete="true"><i class="fas fa-eye"></i>Delete</a>
+                                                    data-confirm-delete="true"><i class="fas fa-trash fa-sm mx-1"></i>Delete</a>
                                             </td>
                                         @endif
                                       </tr>
@@ -94,5 +81,13 @@
         <x-app.footer />
     </main>
 
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#criteria-table').DataTable({
+                searching: true, // Aktifkan fitur pencarian
+                scrollX: false
+            });
+        });
+    </script>
 </x-app-layout>
-

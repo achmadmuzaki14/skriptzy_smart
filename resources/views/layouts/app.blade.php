@@ -66,6 +66,7 @@
     <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="../../assets/css/corporate-ui-dashboard.css?v=1.0.0" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -78,6 +79,7 @@
             text-align: center;
         } */
     </style>
+    @stack('styles')
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -182,12 +184,14 @@
     </div> --}}
     @include('sweetalert::alert')
     <!--   Core JS Files   -->
+    @stack('scripts')
     <script src="../../assets/js/core/popper.min.js"></script>
     <script src="../../assets/js/core/bootstrap.min.js"></script>
     <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../../assets/js/plugins/chartjs.min.js"></script>
     <script src="../../assets/js/plugins/swiper-bundle.min.js" type="text/javascript"></script>
+
     {{-- <script>
         if (document.getElementsByClassName('mySwiper')) {
             var swiper = new Swiper(".mySwiper", {
