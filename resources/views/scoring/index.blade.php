@@ -22,9 +22,11 @@
                                     {{-- <a href="#" class="btn btn-dark btn-primary" data-toggle="modal" data-target="#alternativeModal">
                                         <i class="fas fa-user-plus me-2"></i> Tambah Penilaian
                                     </a> --}}
+                                    @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                     <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#alternativeModal">
                                         Tambah Penilaian
                                       </button>
+                                      @endif
                                     <!-- modal select alternative -->
                                         <div class="modal fade" id="alternativeModal" tabindex="-1" role="dialog"
                                         aria-labelledby="alternativeModalLabel" aria-hidden="true">

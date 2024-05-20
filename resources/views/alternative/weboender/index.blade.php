@@ -26,11 +26,13 @@
                                         Here you can manage alternatif.
                                     </p>
                                 </div>
+                                @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                 <div class="col-6 text-end">
                                     <a href="{{ route('alternative.weboender.create') }}" class="btn btn-dark btn-primary">
                                         <i class="fas fa-user-plus me-2"></i> Tambah Alternatif
                                     </a>
                                 </div>
+                                @endif
                             </div>
                         </div>
                         <div class="row justify-content-center">

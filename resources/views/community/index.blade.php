@@ -18,11 +18,13 @@
                                         Here you can manage community.
                                     </p>
                                 </div>
+                                @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                 <div class="col-6 text-end">
                                     <a href="{{ route('community.create') }}" class="btn btn-dark btn-primary">
                                         <i class="fas fa-user-plus me-2"></i> Tambah Komunitas
                                     </a>
                                 </div>
+                                @endif
                             </div>
                         </div>
                         <div class="row justify-content-center">

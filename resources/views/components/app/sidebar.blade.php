@@ -144,12 +144,14 @@ if (auth()->user()->role == 'super_admin') {
                     <span class="nav-link-text ms-1">Index Community</span>
                 </a>
             </li>
+            @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
             <li class="nav-item border-start my-0 pt-2">
                 <a class="nav-link position-relative ms-0 ps-2 py-2 {{ is_current_route('community.create') ? 'active' : '' }}"
                     href="{{ route('community.create') }}">
                     <span class="nav-link-text ms-1">Add Community</span>
                 </a>
             </li>
+            @endif
             <!-- End Community -->
             <!-- Start Kriteria -->
             <li class="nav-item mt-2">

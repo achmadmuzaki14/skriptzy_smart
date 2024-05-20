@@ -22,7 +22,7 @@
                                 </div>
                                 <div class="col-6 text-end">
                                     <!-- need penyesuaian -->
-                                    @if (auth()->user()->role == 'pembimbing_weboender' || auth()->user()->role == 'super_admin')
+                                    @if (auth()->user()->role == 'super_admin' || auth()->user()->role == 'pembimbing')
                                         <a href="{{ route('criteria.weboender.create') }}" class="btn btn-dark btn-primary">
                                             <i class="fas fa-user-plus me-2"></i> Tambah Kriteria
                                         </a>

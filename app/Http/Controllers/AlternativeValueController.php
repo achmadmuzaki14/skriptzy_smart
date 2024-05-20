@@ -40,11 +40,13 @@ class AlternativeValueController extends Controller
                 $communityId = Community::where('name', $communityName)->value('id');
 
                 // Dapatkan alternatif nilai yang terkait dengan ID komunitas
+                // $alternatives = Alternative::latest()->get();
+                $alternatives = Alternative::where('name', $communityName)->get();
                 $alternative_values_data = AlternativeValue::whereHas('alternative.community', function ($query) use ($communityId) {
                     $query->where('communities.id', $communityId);
                 })->with(['alternative', 'user'])->latest()->get();
 
-                return view('scoring.index', compact('alternative_values_data'));
+                return view('scoring.index', compact('alternative_values_data', 'alternatives'));
             }else{
                 Alert::toast('Akses Dilarang!', 'error');
                 return redirect()->back();
