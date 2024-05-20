@@ -78,6 +78,7 @@ Route::group(['prefix' => 'scoring'], function () {
         Route::get('/{alternativeValue}/edit', [AlternativeValueController::class, 'edit'])->name('scoring.edit');
         Route::put('/{alternativeValue}', [AlternativeValueController::class, 'update'])->name('scoring.update');
         Route::post('/check-exist', [AlternativeValueController::class, 'checkExist'])->name('scoring.check-exist');
+        Route::delete('/{alternativeValue}', [AlternativeValueController::class, 'destroy'])->name('alternativeValue.destroy');
     });
     Route::group(['prefix' => '{communityName}'], function () {
         Route::get('/', [AlternativeValueController::class, 'index'])->name('scoring.index')->middleware('auth'); // need penyesuaian

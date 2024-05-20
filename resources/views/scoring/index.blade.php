@@ -106,9 +106,8 @@
                                                 <a href="{{ route('scoring.edit', $alternative_values->id) }}" class="btn btn-warning btn-sm">
                                                     <i class="fas fa-pen"></i> Edit
                                                 </a>
-                                            <a href="#" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash fa-sm"></i> Hapus
-                                            </a>
+                                                <a href="{{ route('alternativeValue.destroy', $alternative_values->id) }}" class="btn btn-danger btn-sm"
+                                                    data-confirm-delete="true"><i class="fas fa-trash fa-sm mx-1"></i>Delete</a>
                                             </td>
                                         @endif
                                       </tr>

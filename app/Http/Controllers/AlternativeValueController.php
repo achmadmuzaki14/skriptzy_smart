@@ -17,6 +17,9 @@ class AlternativeValueController extends Controller
      */
     public function index($communityName)
     {
+        $title = 'Delete Score?';
+        $text = 'Apakah anda yakin ingin menghapus data ini?';
+        confirmDelete($title, $text, 'alternativeValue.destroy');
         // dd($communityName);
         if (($communityName == 'all') ) {
             if (auth()->user()->role == 'super_admin') {
@@ -205,6 +208,30 @@ class AlternativeValueController extends Controller
      */
     public function destroy(AlternativeValue $alternativeValue)
     {
-        //
+        try {
+            // Get the community ID and alternative ID related to this record
+            $communityId = $alternativeValue->alternative->community_id;
+            $alternativeId = $alternativeValue->alternative_id;
+
+            // Delete all AlternativeValue records that match the same community and alternative
+            AlternativeValue::where('alternative_id', $alternativeId)
+                            ->whereHas('alternative', function ($query) use ($communityId) {
+                                $query->where('community_id', $communityId);
+                            })->delete();
+
+            // Optionally, recalculate rankings if needed
+            $penilaian = app(ScoreResultController::class)->calculateRankingAndStore();
+            if ($penilaian) {
+                Alert::success('Berhasil', 'Data berhasil dihapus');
+            } else {
+                Alert::error('Gagal', 'Data berhasil dihapus, namun gagal memperbarui peringkat');
+            }
+
+            // Redirect to the scoring index page
+            return redirect()->route('scoring.index', ['communityName' => 'all']);
+        } catch (\Exception $e) {
+            Alert::error('Gagal', 'Data gagal dihapus');
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 }
