@@ -27,30 +27,36 @@ use App\Http\Controllers\ArtisanController;
 
 Route::group(['prefix' => 'alternative'], function () {
     Route::get('/', [AlternativeController::class, 'index'])->name('alternative.weboender.index')->middleware('auth');
-    Route::get('/create', [AlternativeController::class, 'create'])->name('alternative.weboender.create')->middleware('auth');
-    Route::post('/', [AlternativeController::class, 'store'])->name('alternative.weboender.store')->middleware('auth');
-    Route::get('/{alternative}/edit', [AlternativeController::class, 'edit'])->name('alternative.edit');
-    Route::put('/{alternative}', [AlternativeController::class, 'update'])->name('alternative.update');
-    Route::delete('/{alternative}', [AlternativeController::class, 'destroy'])->name('alternative.destroy');
+    Route::middleware(['auth', 'pembimbing'])->group(function () {
+        Route::get('/create', [AlternativeController::class, 'create'])->name('alternative.weboender.create')->middleware('auth');
+        Route::post('/', [AlternativeController::class, 'store'])->name('alternative.weboender.store')->middleware('auth');
+        Route::get('/{alternative}/edit', [AlternativeController::class, 'edit'])->name('alternative.edit');
+        Route::put('/{alternative}', [AlternativeController::class, 'update'])->name('alternative.update');
+        Route::delete('/{alternative}', [AlternativeController::class, 'destroy'])->name('alternative.destroy');
+    });
 });
 
 Route::group(['prefix' => 'criteria'], function () {
     Route::get('/', [CriteriaController::class, 'index'])->name('criteria.weboender.index')->middleware('auth');
-    Route::get('/create/data', [CriteriaController::class, 'create'])->name('criteria.weboender.create')->middleware('auth');
-    Route::post('/', [CriteriaController::class, 'store'])->name('criteria.weboender.store')->middleware('auth');
-    Route::get('/{criteria}/edit', [CriteriaController::class, 'edit'])->name('criteria.edit');
-    Route::put('/{criteria}', [CriteriaController::class, 'update'])->name('criteria.update');
-    Route::delete('/criteria/{criteria}', [CriteriaController::class, 'destroy'])->name('criteria.destroy');
+    Route::middleware(['auth', 'pembimbing'])->group(function () {
+        Route::get('/create/data', [CriteriaController::class, 'create'])->name('criteria.weboender.create');
+        Route::post('/', [CriteriaController::class, 'store'])->name('criteria.weboender.store');
+        Route::get('/{criteria}/edit', [CriteriaController::class, 'edit'])->name('criteria.edit');
+        Route::put('/{criteria}', [CriteriaController::class, 'update'])->name('criteria.update');
+        Route::delete('/criteria/{criteria}', [CriteriaController::class, 'destroy'])->name('criteria.destroy');
+    });
 });
 
 Route::group(['prefix' => 'community'], function () {
     Route::get('/', [CommunityController::class, 'index'])->name('community.index')->middleware('auth');
-    Route::get('/create', [CommunityController::class, 'create'])->name('community.create')->middleware('auth');
-    Route::post('/', [CommunityController::class, 'store'])->name('community.store')->middleware('auth');
-    Route::get('/list', [CommunityController::class, 'getCommunity'])->name('community.list');
-    Route::get('/{community}/edit', [CommunityController::class, 'edit'])->name('community.edit');
-    Route::put('/{community}', [CommunityController::class, 'update'])->name('community.update');
-    Route::delete('/{community}', [CommunityController::class, 'destroy'])->name('community.destroy');
+    Route::middleware(['auth', 'pembimbing'])->group(function () {
+        Route::get('/create', [CommunityController::class, 'create'])->name('community.create');
+        Route::post('/', [CommunityController::class, 'store'])->name('community.store');
+        Route::get('/list', [CommunityController::class, 'getCommunity'])->name('community.list');
+        Route::get('/{community}/edit', [CommunityController::class, 'edit'])->name('community.edit');
+        Route::put('/{community}', [CommunityController::class, 'update'])->name('community.update');
+        Route::delete('/{community}', [CommunityController::class, 'destroy'])->name('community.destroy');
+    });
 });
 
 Route::group(['prefix' => 'result'], function () {
@@ -65,13 +71,14 @@ Route::group(['prefix' => 'result'], function () {
 });
 
 Route::group(['prefix' => 'scoring'], function () {
-    Route::post('/alternative/get-by-community', [AlternativeController::class, 'getCommunityIdByAlternative'])->name('alternative.get-by-community');
-    Route::get('/create', [AlternativeValueController::class, 'create'])->name('scoring.create')->middleware('auth');
-    Route::post('/store', [AlternativeValueController::class, 'store'])->name('scoring.store')->middleware('auth');
-    Route::get('/{alternativeValue}/edit', [AlternativeValueController::class, 'edit'])->name('scoring.edit');
-    Route::put('/{alternativeValue}', [AlternativeValueController::class, 'update'])->name('scoring.update');
-    Route::post('/check-exist', [AlternativeValueController::class, 'checkExist'])->name('scoring.check-exist');
-
+    Route::middleware(['auth', 'pembimbing'])->group(function () {
+        Route::post('/alternative/get-by-community', [AlternativeController::class, 'getCommunityIdByAlternative'])->name('alternative.get-by-community');
+        Route::get('/create', [AlternativeValueController::class, 'create'])->name('scoring.create');
+        Route::post('/store', [AlternativeValueController::class, 'store'])->name('scoring.store');
+        Route::get('/{alternativeValue}/edit', [AlternativeValueController::class, 'edit'])->name('scoring.edit');
+        Route::put('/{alternativeValue}', [AlternativeValueController::class, 'update'])->name('scoring.update');
+        Route::post('/check-exist', [AlternativeValueController::class, 'checkExist'])->name('scoring.check-exist');
+    });
     Route::group(['prefix' => '{communityName}'], function () {
         Route::get('/', [AlternativeValueController::class, 'index'])->name('scoring.index')->middleware('auth'); // need penyesuaian
     });
@@ -84,13 +91,13 @@ Route::get('/migrate-seed', [ArtisanController::class, 'migrateAndSeed']);
 // Route::get('/result/{communityName}', [ScoreResultController::class, 'index'])->name('result.index');
 
 // dont forget to delete
-Route::get('/utility', [ScoreResultController::class, 'calculateUtilityForAll']);
-Route::get('/final', [ScoreResultController::class, 'calculateFinalUtilityForAll']);
-Route::get('/masuk', [ScoreResultController::class, 'calculateRankingAndStore']);
-Route::get('/bobot', [ScoreResultController::class, 'criteriaWeight']);
-Route::get('/fraction', [ScoreResultController::class, 'fraction']);
-
-
+Route::middleware(['auth', 'pembimbing'])->group(function () {
+    Route::get('/utility', [ScoreResultController::class, 'calculateUtilityForAll']);
+    Route::get('/final', [ScoreResultController::class, 'calculateFinalUtilityForAll']);
+    Route::get('/masuk', [ScoreResultController::class, 'calculateRankingAndStore']);
+    Route::get('/bobot', [ScoreResultController::class, 'criteriaWeight']);
+    Route::get('/fraction', [ScoreResultController::class, 'fraction']);
+});
 
 // SPK
 Route::get('/dashboard', function () {
@@ -105,17 +112,6 @@ Route::get('/', function () {
 Route::get('/tables', function () {
     return view('tables');
 })->name('tables')->middleware('auth');
-
-// RTL -> Alternatif
-
-// alternatif weboender
-// Route::get('/alternatif', function () {
-//     return view('RTL');
-// })->name('alternatif')->middleware('auth');
-
-// Route::get('/', function () {
-//     return redirect('/dashboard');
-// })->middleware('auth');
 
 Route::get('/wallet', function () {
     return view('wallet');
