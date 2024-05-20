@@ -18,7 +18,7 @@ if (auth()->user()->role == 'super_admin') {
     </div>
     <div class="collapse navbar-collapse px-4  w-auto " id="sidenav-collapse-main">
         <ul class="navbar-nav">
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link  {{ is_current_route('dashboard') ? 'active' : '' }}"
                     href="{{ route('dashboard') }}">
                     <div
@@ -44,14 +44,14 @@ if (auth()->user()->role == 'super_admin') {
                     </div>
                     <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <a class="nav-link {{ is_current_route('result') ? 'active' : '' }}" href="{{ route('result.index') }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <svg width="30px" height="30px" viewBox="0 0 48 48" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <title>Hasil Perankingan</title>
+                            <title>Dashboard</title>
                             <g id="result" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <g id="template" transform="translate(12.000000, 12.000000)" fill="#FFFFFF"
                                     fill-rule="nonzero">
@@ -68,7 +68,7 @@ if (auth()->user()->role == 'super_admin') {
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Hasil Perankingan</span>
+                    <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
             </li>
             <!-- Start Penilaian -->
