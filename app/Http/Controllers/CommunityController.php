@@ -14,7 +14,7 @@ class CommunityController extends Controller
      */
     public function index()
     {
-        $Community = Community::query()->paginate(10);
+        $Community = Community::latest()->get();
         $title = 'Delete Community!';
         $text = 'Apakah anda yakin ingin menghapus data ini?';
         confirmDelete($title, $text, 'community.destroy');

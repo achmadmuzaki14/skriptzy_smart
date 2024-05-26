@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart_komunitas
+    image: smart_komunitas
+    tty: true
+    restart: unless-stopped
+    environment:
+        SERVICE_NAME: app
+    working_dir: /var/www/smart_komunitas
+    volumes:
+      - .:/var/www/smart_komunitas
+      - ./storage/php.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - smart_komunitas
+
+  webserver:
+    image: nginx:alpine
+    container_name: nginxsmart_komunitas
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "2022:80"
+    volumes:
+      - .:/var/www/smart_komunitas
+      - ./storage/:/etc/nginx/conf.d/
+    networks:
+      - smart_komunitas
+  db:
+    image: mysql:8.3
+    container_name: dbsmart_komunitas
+    restart: always
+    tty: true
+    ports:
+      - "20222:3306"
+    volumes:
+      - lbdata:/var/lib/mysql
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: smart_komunitas
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - smart_komunitas
+
+  phpmyadmin:
+    image: arm64v8/phpmyadmin
+    container_name: pmasmart_komunitas
+    links:
+      - db
+    restart: always
+    ports:
+      - 7010:80
+    networks:
+      - smart_komunitas
+
+networks:
+    smart_komunitas:
+        driver: bridge
+
+volumes:
+    lbdata:
+        driver: local
+

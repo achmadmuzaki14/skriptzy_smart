@@ -33,7 +33,6 @@ class AlternativeValueController extends Controller
             //     return redirect()->back();
             // }
         }else {
-            // dd('hao');
             if (auth()->user()->role == 'user') {
                 $alternatives = Alternative::latest()->get();
                 $alternative_values_data = AlternativeValue::query()->get();
@@ -44,7 +43,7 @@ class AlternativeValueController extends Controller
 
                 // Dapatkan alternatif nilai yang terkait dengan ID komunitas
                 // $alternatives = Alternative::latest()->get();
-                $alternatives = Alternative::where('name', $communityName)->get();
+                $alternatives = Alternative::where('community_id', $communityId)->get();
                 $alternative_values_data = AlternativeValue::whereHas('alternative.community', function ($query) use ($communityId) {
                     $query->where('communities.id', $communityId);
                 })->with(['alternative', 'user'])->latest()->get();
@@ -84,6 +83,13 @@ class AlternativeValueController extends Controller
      */
     public function store(Request $request)
     {
+        $communityName = 'all'; // default value
+        $user = auth()->user();
+
+        if ($user->community) {
+            $communityName = $user->community->name;
+        }
+
         try {
             // Inisialisasi array untuk menyimpan data nilai kriteria
             $scores = [];
@@ -114,9 +120,8 @@ class AlternativeValueController extends Controller
             if ($penilaian) {
                 // Berhasil menyimpan data
                 Alert::success('Berhasil', 'Data berhasil disimpan');
-                return redirect()->route('scoring.index',  ['communityName' => 'all']);
+                return redirect()->route('scoring.index', ['communityName' => $communityName]);
             } else {
-                dd('gagal');
                 // Gagal menyimpan data
                 Alert::error('Gagal', 'Data gagal disimpan');
                 return redirect()->back()->withInput();
@@ -166,12 +171,18 @@ class AlternativeValueController extends Controller
         }
     }
 
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, AlternativeValue $alternativeValue)
     {
+
+        $communityName = 'all'; // default value
+        $user = auth()->user();
+
+        if ($user->community) {
+            $communityName = $user->community->name;
+        }
 
         try {
             $validator = Validator::make($request->all(), [
@@ -190,7 +201,7 @@ class AlternativeValueController extends Controller
             if ($penilaian) {
                 // Berhasil memperbarui data
                 Alert::success('Berhasil', 'Data berhasil diperbarui');
-                return redirect()->route('scoring.index', ['communityName' => 'all']);
+                return redirect()->route('scoring.index', ['communityName' => $communityName]);
             } else {
                 // Gagal menyimpan data
                 Alert::error('Gagal', 'Data gagal diperbarui');
@@ -208,6 +219,13 @@ class AlternativeValueController extends Controller
      */
     public function destroy(AlternativeValue $alternativeValue)
     {
+        $communityName = 'all'; // default value
+        $user = auth()->user();
+
+        if ($user->community) {
+            $communityName = $user->community->name;
+        }
+
         try {
             // Get the community ID and alternative ID related to this record
             $communityId = $alternativeValue->alternative->community_id;
@@ -228,7 +246,7 @@ class AlternativeValueController extends Controller
             }
 
             // Redirect to the scoring index page
-            return redirect()->route('scoring.index', ['communityName' => 'all']);
+            return redirect()->route('scoring.index', ['communityName' => $communityName]);
         } catch (\Exception $e) {
             Alert::error('Gagal', 'Data gagal dihapus');
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
