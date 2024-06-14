@@ -20,7 +20,7 @@ class AlternativeValueController extends Controller
         $title = 'Delete Score?';
         $text = 'Apakah anda yakin ingin menghapus data ini?';
         confirmDelete($title, $text, 'alternativeValue.destroy');
-        // dd($communityName);
+
         if (($communityName == 'all') ) {
             if (auth()->user()->role == 'super_admin') {
                 $alternatives = Alternative::latest()->get();
@@ -28,7 +28,7 @@ class AlternativeValueController extends Controller
                 return view('scoring.index', compact(['alternative_values_data', 'alternatives']));
             }
             // } else {
-            //     dd('hai');
+
             //     Alert::toast('Akses Dilarang!', 'error');
             //     return redirect()->back();
             // }
@@ -47,6 +47,7 @@ class AlternativeValueController extends Controller
                 $alternative_values_data = AlternativeValue::whereHas('alternative.community', function ($query) use ($communityId) {
                     $query->where('communities.id', $communityId);
                 })->with(['alternative', 'user'])->latest()->get();
+                // dd(AlternativeValue::whereHas('alternative.community')->get());
 
                 return view('scoring.index', compact('alternative_values_data', 'alternatives'));
             }else{

@@ -225,6 +225,95 @@ class ScoreResultController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // Kode Awal
+    // public function calculateRankingAndStore()
+    // {
+    //     // Mendapatkan semua nilai akhir utility untuk setiap alternatif
+    //     $finalUtilityValues = $this->calculateFinalUtilityForAll();
+
+    //     // Mendapatkan semua komunitas yang ada
+    //     $communities = Community::all();
+
+    //     try {
+    //         // Hapus semua data sebelumnya dari tabel scoreresult
+    //         ScoreResult::truncate();
+
+    //         foreach ($communities as $community) {
+    //             // Mendapatkan nama komunitas
+    //             $communityName = $community->name;
+
+    //             // Mendapatkan alternatif yang terkait dengan komunitas ini
+    //             $alternativesInCommunity = Alternative::whereHas('community', function ($query) use ($communityName) {
+    //                 $query->where('name', $communityName);
+    //             })->get();
+
+    //             // Mengurutkan alternatif berdasarkan nilai akhir utility dari yang tertinggi ke terendah
+    //             $rankedAlternatives = $this->sortAlternativesByUtility($finalUtilityValues, $alternativesInCommunity);
+    //             // dd($rankedAlternatives);
+    //             // Menyimpan peringkat dan data lainnya ke dalam tabel scoreresult
+    //             $ranking = 1;
+    //             foreach ($rankedAlternatives as $alternativeName => $finalUtility) {
+    //                 // Mendapatkan id alternatif berdasarkan nama alternatif
+    //                 $alternativeId = Alternative::where('name', $alternativeName)->value('id');
+    //                 try {
+    //                     // Menyimpan data ke dalam tabel scoreresult
+    //                     ScoreResult::create([
+    //                         'alternative_id' => $alternativeId,
+    //                         'hasil_penilaian' => $finalUtility,
+    //                         'rank' => $ranking,
+    //                     ]);
+    //                     // Jika berhasil, lanjutkan ke proses berikutnya
+    //                     // Tambahkan kode berikutnya di sini
+    //                 } catch (\Exception $e) {
+    //                     // Jika terjadi kesalahan, tampilkan pesan kesalahan
+    //                 }
+    //                 $ranking++; // Tingkatkan peringkat untuk alternatif berikutnya
+    //             }
+    //         }
+    //     } catch (\Exception $e) {
+    //         return redirect()->route('alternative.weboender.index')->withErrors(['error' => $e->getMessage()]);
+    //     }
+
+    //     return $alternativeId;
+    // }
+
+    // public function sortAlternativesByUtility($finalUtilityValues, $alternativesInCommunity)
+    // {
+    //     $rankedAlternatives = [];
+
+    //     foreach ($alternativesInCommunity as $alternative) {
+    //         $alternativeName = $alternative->name;
+    //         $communityName = $alternative->community->name;
+
+    //         // Pastikan bahwa nama komunitas ada dalam array finalUtilityValues
+    //         if (isset($finalUtilityValues[$communityName])) {
+    //             // Ambil nilai akhir utilitas yang sesuai dengan nama komunitas dan nama alternatif
+    //             if (isset($finalUtilityValues[$communityName][$alternativeName])) {
+    //                 $finalUtility = $finalUtilityValues[$communityName][$alternativeName];
+
+    //                 // Tambahkan nama alternatif dan nilai akhir utilitas ke dalam array rankedAlternatives
+    //                 $rankedAlternatives[$alternativeName] = $finalUtility;
+    //             } else {
+    //                 // Jika tidak ada nilai akhir utilitas yang sesuai untuk alternatif ini di komunitas tertentu
+    //                 // Tindakan lanjutnya bisa berupa penanganan khusus tergantung pada kebutuhan aplikasi Anda
+    //                 Log::warning("Nilai akhir utilitas tidak tersedia untuk alternatif '$alternativeName' di komunitas '$communityName'");
+    //             }
+    //         } else {
+    //             // Jika tidak ada nilai akhir utilitas untuk komunitas tertentu
+    //             // Tindakan lanjutnya bisa berupa penanganan khusus tergantung pada kebutuhan aplikasi Anda
+    //             Log::warning("Nilai akhir utilitas tidak tersedia untuk komunitas '$communityName'");
+    //         }
+    //     }
+
+    //     // Mengurutkan alternatif berdasarkan nilai akhir utility dari yang tertinggi ke terendah
+    //     arsort($rankedAlternatives);
+
+    //     return $rankedAlternatives;
+    // }
+
+    // kode akhir
+
+    // kode baru
     public function calculateRankingAndStore()
     {
         // Mendapatkan semua nilai akhir utility untuk setiap alternatif
@@ -233,13 +322,14 @@ class ScoreResultController extends Controller
         // Mendapatkan semua komunitas yang ada
         $communities = Community::all();
 
+
         try {
+            // Hapus semua data sebelumnya dari tabel scoreresult
+            ScoreResult::truncate();
 
             foreach ($communities as $community) {
-
                 // Mendapatkan nama komunitas
                 $communityName = $community->name;
-
 
                 // Mendapatkan alternatif yang terkait dengan komunitas ini
                 $alternativesInCommunity = Alternative::whereHas('community', function ($query) use ($communityName) {
@@ -248,33 +338,37 @@ class ScoreResultController extends Controller
 
                 // Mengurutkan alternatif berdasarkan nilai akhir utility dari yang tertinggi ke terendah
                 $rankedAlternatives = $this->sortAlternativesByUtility($finalUtilityValues, $alternativesInCommunity);
-                // dd($rankedAlternatives);
+
                 // Menyimpan peringkat dan data lainnya ke dalam tabel scoreresult
                 $ranking = 1;
                 foreach ($rankedAlternatives as $alternativeName => $finalUtility) {
-                    // Mendapatkan id alternatif berdasarkan nama alternatif
-                    $alternativeId = Alternative::where('name', $alternativeName)->value('id');
-                    try {
-                        // Menyimpan data ke dalam tabel scoreresult
-                        ScoreResult::create([
-                            'alternative_id' => $alternativeId,
-                            'hasil_penilaian' => $finalUtility,
-                            'rank' => $ranking,
-                        ]);
-                        // Jika berhasil, lanjutkan ke proses berikutnya
-                        // Tambahkan kode berikutnya di sini
-                    } catch (\Exception $e) {
-                        // Jika terjadi kesalahan, tampilkan pesan kesalahan
+                    // Mendapatkan id alternatif berdasarkan nama alternatif dan komunitas
+                    $alternativeId = Alternative::where('name', $alternativeName)
+                                                ->where('community_id', $community->id)
+                                                ->value('id');
+
+                    if ($alternativeId) {
+                        try {
+                            // Menyimpan data ke dalam tabel scoreresult
+                            ScoreResult::create([
+                                'alternative_id' => $alternativeId,
+                                'hasil_penilaian' => $finalUtility,
+                                'rank' => $ranking,
+                            ]);
+                        } catch (\Exception $e) {
+                            Log::error('Error storing score result: ' . $e->getMessage());
+                        }
+                        $ranking++; // Tingkatkan peringkat untuk alternatif berikutnya
+                    } else {
+                        Log::warning("Alternative ID not found for '$alternativeName' in community '$communityName'");
                     }
-                    $ranking++; // Tingkatkan peringkat untuk alternatif berikutnya
                 }
             }
         } catch (\Exception $e) {
             return redirect()->route('alternative.weboender.index')->withErrors(['error' => $e->getMessage()]);
         }
 
-
-        return $alternativeId;
+        return true;
     }
 
     public function sortAlternativesByUtility($finalUtilityValues, $alternativesInCommunity)
@@ -294,13 +388,9 @@ class ScoreResultController extends Controller
                     // Tambahkan nama alternatif dan nilai akhir utilitas ke dalam array rankedAlternatives
                     $rankedAlternatives[$alternativeName] = $finalUtility;
                 } else {
-                    // Jika tidak ada nilai akhir utilitas yang sesuai untuk alternatif ini di komunitas tertentu
-                    // Tindakan lanjutnya bisa berupa penanganan khusus tergantung pada kebutuhan aplikasi Anda
                     Log::warning("Nilai akhir utilitas tidak tersedia untuk alternatif '$alternativeName' di komunitas '$communityName'");
                 }
             } else {
-                // Jika tidak ada nilai akhir utilitas untuk komunitas tertentu
-                // Tindakan lanjutnya bisa berupa penanganan khusus tergantung pada kebutuhan aplikasi Anda
                 Log::warning("Nilai akhir utilitas tidak tersedia untuk komunitas '$communityName'");
             }
         }
@@ -310,6 +400,9 @@ class ScoreResultController extends Controller
 
         return $rankedAlternatives;
     }
+
+    // akhir kode baru
+
 
     /**
      * Display the specified resource.
@@ -334,21 +427,32 @@ class ScoreResultController extends Controller
 
     public function show($communityName)
     {
-        // Mendapatkan data terbaru dari setiap komunitas
-        $latestResults = ScoreResult::whereHas('alternative.community', function ($query) use ($communityName) {
+        // Mendapatkan semua alternatif yang terkait dengan komunitas yang diberikan
+        $alternativesInCommunity = Alternative::whereHas('community', function ($query) use ($communityName) {
             $query->where('name', $communityName);
-        })->latest()->get();
+        })->get();
 
-        // Kelompokkan hasil berdasarkan alternative_id dan ambil yang terbaru
+        // Debugging: Memastikan semua alternatif yang diambil
+        // dd($alternativesInCommunity->pluck('id'));
+
+        // Mendapatkan semua ScoreResult yang terkait dengan alternatif dalam komunitas tersebut
+        $latestResults = ScoreResult::whereIn('alternative_id', $alternativesInCommunity->pluck('id'))
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Debugging: Memastikan semua hasil terbaru yang diambil
+        // dd($latestResults);
+
+        // Kelompokkan hasil berdasarkan alternative_id dan ambil yang terbaru untuk setiap alternative
         $groupedResults = $latestResults->groupBy('alternative_id')->map(function ($group) {
             return $group->first();
         });
 
+        // Urutkan hasil berdasarkan rank
         $sortedResults = $groupedResults->sortBy('rank');
 
         return view('result.show', compact('sortedResults', 'communityName'));
     }
-
 
     public function showUtility($communityName, $alternativeName)
     {
@@ -390,78 +494,4 @@ class ScoreResultController extends Controller
     {
         //
     }
-
-
-    /// BENER BENER FIX BENER
-    // public function calculateFinalUtilityForAll()
-    // {
-    //     // Mendapatkan semua nilai utility untuk setiap alternatif
-    //     $utilityValues = $this->calculateUtilityForAll();
-
-    //     // Mendapatkan priority untuk setiap kriteria
-    //     $criteriaWeights = $this->criteriaWeight();
-
-    //     // Inisialisasi array untuk menyimpan nilai akhir utility untuk setiap alternatif
-    //     $finalUtilityValues = [];
-
-    //     foreach ($utilityValues as $communityName => $alternatives) {
-    //         foreach ($alternatives as $alternativeName => $criteriaUtilities) {
-    //             // Inisialisasi nilai akhir utility untuk alternatif saat ini
-    //             $finalUtility = 0;
-
-    //             foreach ($criteriaUtilities as $criterionName => $utility) {
-    //                 // Mendapatkan bobot kriteria
-    //                 $criterionWeight = $criteriaWeights[$criterionName];
-
-    //                 // Menambahkan nilai utility kriteria yang telah diprioritykan
-    //                 $finalUtility += $criterionWeight * $utility;
-    //             }
-
-    //             // Simpan nilai akhir utility untuk alternatif saat ini
-    //             $finalUtilityValues[$communityName][$alternativeName] = number_format($finalUtility, 4);
-    //         }
-    //     }
-
-    //     return $finalUtilityValues;
-    // }
-
-
-
-    // data awal benar
-    // /**
-    //  * Display a listing of the resource.
-    //  */
-    // public function calculateFinalUtilityForAll()
-    // {
-    //     // Mendapatkan semua nilai utility untuk setiap alternatif
-    //     $utilityValues = $this->calculateUtilityForAll();
-
-    //     // Mendapatkan priority untuk setiap kriteria
-    //     $criteriaWeights = Criteria::all(['name', 'priority'])->pluck('priority', 'name');
-
-    //     // Inisialisasi array untuk menyimpan nilai akhir utility untuk setiap alternatif
-    //     $finalUtilityValues = [];
-
-    //     foreach ($utilityValues as $communityName => $alternatives) {
-    //         foreach ($alternatives as $alternativeName => $criteriaUtilities) {
-    //             // Inisialisasi nilai akhir utility untuk alternatif saat ini
-    //             $finalUtility = 0;
-
-    //             foreach ($criteriaUtilities as $criterionName => $utility) {
-    //                 // Mendapatkan priority kriteria
-    //                 $criterionWeight = $criteriaWeights[$criterionName];
-
-    //                 // Menambahkan nilai utility kriteria yang telah diprioritykan
-    //                 $finalUtility += $criterionWeight * $utility;
-    //             }
-
-    //             // Simpan nilai akhir utility untuk alternatif saat ini
-    //             $finalUtilityValues[$communityName][$alternativeName] = number_format($finalUtility, 4);
-    //         }
-    //     }
-
-    //     return $finalUtilityValues;
-    // }
-
-
 }

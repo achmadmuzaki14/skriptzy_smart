@@ -35,11 +35,21 @@
                             </div>
                             <div class="pt-0 card-body">
                                 <div class="form-group row">
-                                    <label for="alternative_id" class="col-sm-2 col-form-label">Alternatif</label>
+                                    <label for="alternative_id">Alternatif</label>
                                     <div class="col-sm-12">
                                       <select class="form-control" id="alternative_id" name="alternative_id">
                                         @foreach ($alternatives as $alternative)
                                           <option value="{{ $alternative->id }}">{{ $alternative->name }}</option>
+                                        @endforeach
+                                      </select>
+                                    </div>
+                                  </div>
+                                <div class="form-group row">
+                                    <label for="alternative_id">Komunitas</label>
+                                    <div class="col-sm-12">
+                                      <select class="form-control">
+                                        @foreach ($alternatives as $alternative)
+                                          <option value="{{ $alternative->community_id }}">{{ $alternative->community->name }}</option>
                                         @endforeach
                                       </select>
                                     </div>
